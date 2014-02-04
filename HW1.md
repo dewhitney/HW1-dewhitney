@@ -5,7 +5,7 @@ BIOST 578, HW1
 
 1. Use the GEOmetabd package to find all HCV gene expression data using the Illumina platform submitted by an investigator at Yale. This should be done with a single query, showing the title, the GSE accession number, the GPL accession number and the manufacturer and the description of the platform used.
 
-First we update and install the necessary packages for Bioconductor.
+**Answer**First we update and install the necessary packages for Bioconductor.
 
 ```r
 # This can take a long time to download/install
@@ -27,85 +27,21 @@ biocLite(c("GEOmetadb", "GEOquery"))
 ```
 
 ```
-## package 'GEOmetadb' successfully unpacked and MD5 sums checked
-## package 'GEOquery' successfully unpacked and MD5 sums checked
-## 
-## The downloaded binary packages are in
-## 	C:\Users\David\AppData\Local\Temp\RtmpOioEUs\downloaded_packages
-```
-
-```
+## Warning: packages 'GEOmetadb', 'GEOquery' are in use and will not be installed
 ## Warning: installed directory not writable, cannot update packages 'doParallel',
 ##   'foreign', 'lattice', 'Matrix', 'mgcv', 'nlme', 'rpart', 'survival'
 ```
 
 ```r
 library(GEOmetadb)
-```
-
-```
-## Loading required package: GEOquery
-## Loading required package: Biobase
-## Loading required package: BiocGenerics
-## Loading required package: parallel
-## 
-## Attaching package: 'BiocGenerics'
-## 
-## The following objects are masked from 'package:parallel':
-## 
-##     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
-##     clusterExport, clusterMap, parApply, parCapply, parLapply,
-##     parLapplyLB, parRapply, parSapply, parSapplyLB
-## 
-## The following object is masked from 'package:stats':
-## 
-##     xtabs
-## 
-## The following objects are masked from 'package:base':
-## 
-##     anyDuplicated, append, as.data.frame, as.vector, cbind,
-##     colnames, duplicated, eval, evalq, Filter, Find, get,
-##     intersect, is.unsorted, lapply, Map, mapply, match, mget,
-##     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
-##     rbind, Reduce, rep.int, rownames, sapply, setdiff, sort,
-##     table, tapply, union, unique, unlist
-## 
-## Welcome to Bioconductor
-## 
-##     Vignettes contain introductory material; view with
-##     'browseVignettes()'. To cite Bioconductor, see
-##     'citation("Biobase")', and for packages 'citation("pkgname")'.
-## 
-## Setting options('download.file.method.GEOquery'='auto')
-## Loading required package: RSQLite
-## Loading required package: DBI
-```
-
-```r
 
 # This database download is particularly slow, so eval=FALSE for this code
 # chunk
+```
+
+
+```r
 getSQLiteFile()
-```
-
-```
-## Unzipping...
-```
-
-```
-## Warning: closing unused connection 5
-## (http://gbnci.abcc.ncifcrf.gov/geo/GEOmetadb.sqlite.gz)
-```
-
-```
-## Metadata associate with downloaded file:
-##                 name               value
-## 1     schema version                 1.0
-## 2 creation timestamp 2014-02-01 20:07:10
-```
-
-```
-## [1] "C:/Users/David/Documents/GitHub/HW1-dewhitney/GEOmetadb.sqlite"
 ```
 
 
@@ -114,10 +50,19 @@ getSQLiteFile()
 geo_con = dbConnect(SQLite(), "GEOmetadb.sqlite")
 ```
 
-```
-## Error: could not find function "dbConnect"
+
+
+```r
+# Found pubmed_id on the GEO website This query has Illumina and Affymetrix
+# manufacturers
+res = dbGetQuery(geo_con, "SELECT gpl.title, gpl.gpl, gse.gse, gpl.manufacturer, gpl.description FROM (gse JOIN gse_gpl ON gse.gse = gse_gpl.gse) j JOIN gpl ON j.gpl=gpl.gpl WHERE gse.pubmed_id='23067362'")
 ```
 
 
 2. Reproduce your above query using the data.table package. Again, try to use a single line of code. [Hint: You first need to convert all db tables to data.table tables].
+
+
+```r
+library(data.table)
+```
 

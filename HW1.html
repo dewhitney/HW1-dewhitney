@@ -187,7 +187,7 @@ hljs.initHighlightingOnLoad();
 <li>Use the GEOmetabd package to find all HCV gene expression data using the Illumina platform submitted by an investigator at Yale. This should be done with a single query, showing the title, the GSE accession number, the GPL accession number and the manufacturer and the description of the platform used.</li>
 </ol>
 
-<p>First we update and install the necessary packages for Bioconductor.</p>
+<p><strong>Answer</strong>First we update and install the necessary packages for Bioconductor.</p>
 
 <pre><code class="r"># This can take a long time to download/install
 source(&quot;http://bioconductor.org/biocLite.R&quot;)
@@ -204,88 +204,34 @@ source(&quot;http://bioconductor.org/biocLite.R&quot;)
 ## Installing package(s) &#39;GEOmetadb&#39; &#39;GEOquery&#39;
 </code></pre>
 
-<pre><code>## package &#39;GEOmetadb&#39; successfully unpacked and MD5 sums checked
-## package &#39;GEOquery&#39; successfully unpacked and MD5 sums checked
-## 
-## The downloaded binary packages are in
-##  C:\Users\David\AppData\Local\Temp\RtmpOioEUs\downloaded_packages
-</code></pre>
-
-<pre><code>## Warning: installed directory not writable, cannot update packages &#39;doParallel&#39;,
+<pre><code>## Warning: packages &#39;GEOmetadb&#39;, &#39;GEOquery&#39; are in use and will not be installed
+## Warning: installed directory not writable, cannot update packages &#39;doParallel&#39;,
 ##   &#39;foreign&#39;, &#39;lattice&#39;, &#39;Matrix&#39;, &#39;mgcv&#39;, &#39;nlme&#39;, &#39;rpart&#39;, &#39;survival&#39;
 </code></pre>
 
 <pre><code class="r">library(GEOmetadb)
-</code></pre>
 
-<pre><code>## Loading required package: GEOquery
-## Loading required package: Biobase
-## Loading required package: BiocGenerics
-## Loading required package: parallel
-## 
-## Attaching package: &#39;BiocGenerics&#39;
-## 
-## The following objects are masked from &#39;package:parallel&#39;:
-## 
-##     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
-##     clusterExport, clusterMap, parApply, parCapply, parLapply,
-##     parLapplyLB, parRapply, parSapply, parSapplyLB
-## 
-## The following object is masked from &#39;package:stats&#39;:
-## 
-##     xtabs
-## 
-## The following objects are masked from &#39;package:base&#39;:
-## 
-##     anyDuplicated, append, as.data.frame, as.vector, cbind,
-##     colnames, duplicated, eval, evalq, Filter, Find, get,
-##     intersect, is.unsorted, lapply, Map, mapply, match, mget,
-##     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
-##     rbind, Reduce, rep.int, rownames, sapply, setdiff, sort,
-##     table, tapply, union, unique, unlist
-## 
-## Welcome to Bioconductor
-## 
-##     Vignettes contain introductory material; view with
-##     &#39;browseVignettes()&#39;. To cite Bioconductor, see
-##     &#39;citation(&quot;Biobase&quot;)&#39;, and for packages &#39;citation(&quot;pkgname&quot;)&#39;.
-## 
-## Setting options(&#39;download.file.method.GEOquery&#39;=&#39;auto&#39;)
-## Loading required package: RSQLite
-## Loading required package: DBI
-</code></pre>
-
-<pre><code class="r">
 # This database download is particularly slow, so eval=FALSE for this code
 # chunk
-getSQLiteFile()
 </code></pre>
 
-<pre><code>## Unzipping...
-</code></pre>
-
-<pre><code>## Warning: closing unused connection 5
-## (http://gbnci.abcc.ncifcrf.gov/geo/GEOmetadb.sqlite.gz)
-</code></pre>
-
-<pre><code>## Metadata associate with downloaded file:
-##                 name               value
-## 1     schema version                 1.0
-## 2 creation timestamp 2014-02-01 20:07:10
-</code></pre>
-
-<pre><code>## [1] &quot;C:/Users/David/Documents/GitHub/HW1-dewhitney/GEOmetadb.sqlite&quot;
+<pre><code class="r">getSQLiteFile()
 </code></pre>
 
 <pre><code class="r">geo_con = dbConnect(SQLite(), &quot;GEOmetadb.sqlite&quot;)
 </code></pre>
 
-<pre><code>## Error: could not find function &quot;dbConnect&quot;
+<pre><code class="r"># Found pubmed_id on the GEO website This query has Illumina and Affymetrix
+# manufacturers
+res = dbGetQuery(geo_con, &quot;SELECT gpl.title, gpl.gpl, gse.gse, gpl.manufacturer, gpl.description FROM (gse JOIN gse_gpl ON gse.gse = gse_gpl.gse) j JOIN gpl ON j.gpl=gpl.gpl WHERE gse.pubmed_id=&#39;23067362&#39;&quot;)
 </code></pre>
 
 <ol>
 <li>Reproduce your above query using the data.table package. Again, try to use a single line of code. [Hint: You first need to convert all db tables to data.table tables].</li>
 </ol>
+
+<pre><code class="r">library(data.table)
+</code></pre>
 
 </body>
 
