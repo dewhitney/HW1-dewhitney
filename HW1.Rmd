@@ -6,7 +6,7 @@ BIOST 578, HW1
 1. Use the GEOmetabd package to find all HCV gene expression data using the Illumina platform submitted by an investigator at Yale. This should be done with a single query, showing the title, the GSE accession number, the GPL accession number and the manufacturer and the description of the platform used.
 
 First we update and install the necessary packages for Bioconductor.
-```{r, eval=FALSE}
+```{r, eval=TRUE, cache=TRUE}
 #This can take a long time to download/install
 source("http://bioconductor.org/biocLite.R")
 biocLite(c("GEOmetadb", "GEOquery"))
@@ -18,6 +18,11 @@ getSQLiteFile()
 
 ```{r}
 geo_con = dbConnect(SQLite(),'GEOmetadb.sqlite')
+```
+
+```{r}
+#
+res1 = dbGetQuery(geo_con, "SELECT gpl.title, gpl.gpl, gpl.manufacturer, description FROM gpl WHERE gpl.manufacturer LIKE 'Illumina'")
 ```
 
 2. Reproduce your above query using the data.table package. Again, try to use a single line of code. [Hint: You first need to convert all db tables to data.table tables].
