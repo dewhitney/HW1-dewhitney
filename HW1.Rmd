@@ -26,7 +26,7 @@ geo_con = dbConnect(SQLite(),'GEOmetadb.sqlite')
 
 ```{r}
 # Join gse and gpl via the gse_gpl table
-res = dbGetQuery(geo_con, "SELECT gse.title, gse.gse, gpl.gpl, gpl.manufacturer, gpl.technology FROM (gse JOIN gse_gpl ON gse.gse = gse_gpl.gse) j JOIN gpl ON j.gpl=gpl.gpl WHERE gpl.manufacturer LIKE '%Illumina%' AND gse.contact LIKE '%Yale%' AND (gse.title LIKE '%HCV%' OR gse.title LIKE '%Hepatitis C%') ")
+res = dbGetQuery(geo_con, "SELECT gse.title, gse.gse, gpl.gpl, gpl.manufacturer, gpl.technology, gse.contact FROM (gse JOIN gse_gpl ON gse.gse = gse_gpl.gse) j JOIN gpl ON j.gpl=gpl.gpl WHERE gpl.manufacturer LIKE '%Illumina%' AND gse.contact LIKE '%Yale%' AND gse.title LIKE '%Hepatitis C%'")
 res
 ```
 
@@ -54,5 +54,5 @@ setkey(gse_gse_gpl.dt,gpl)
 merge.gse.gpl.dt = merge(gse_gse_gpl.dt, gpl.dt, all=TRUE)
 
 # The final query for title, accession numbers, manufacturer, platform
-merge.gse.gpl.dt[(title %like% 'HCV' | title %like% 'Hepatitis C') & manufacturer %like% 'Illumina' & contact %like% 'Yale']
+merge.gse.gpl.dt[title %like% 'Hepatitis C' & manufacturer %like% 'Illumina' & contact %like% 'Yale']
 ```
